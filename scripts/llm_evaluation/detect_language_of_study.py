@@ -784,7 +784,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--prompt-version",
         default=DEFAULT_PROMPT_VERSION,
-        help=f"Prompt version to use (default: {DEFAULT_PROMPT_VERSION})",
+        help=f"Version label recorded in output filenames and records. Does not "
+             f"select a prompt file; prompts/ ships the {DEFAULT_PROMPT_VERSION} prompts "
+             f"(default: {DEFAULT_PROMPT_VERSION})",
     )
     parser.add_argument(
         "--csv",
