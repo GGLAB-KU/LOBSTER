@@ -21,11 +21,11 @@ Each line is one annotated review segment (534 total; 529 with annotator consens
 | `venue` | string | Conference venue (e.g., `EMNLP-2023-Main`) |
 | `paper_id` | string | Paper identifier |
 | `review_id` | string | Review identifier |
-| `openreview_link` | string | URL to the review on OpenReview |
+| `openreview_link` | string | URL to the review on OpenReview. Empty for the anonymized ARR venues (`EMNLP-ARR-2024`, `ACL-ARR-2025`) — 159 records |
 | `title` | string | Paper title |
 | `abstract` | string | Paper abstract |
-| `review_text` | string | Full review text |
-| `bias_quoted_text` | string | The specific segment being annotated |
+| `review_text` | string | Full review text, rendered as `Field Label: value` blocks. The label style varies by venue because the source review forms differ (e.g. `Summary / Contributions`, `Paper Topic And Main Contributions`, `paper_summary`) |
+| `bias_quoted_text` | string | The review segment that was annotated. Empty on 193 `No Bias Detected` records where no segment was singled out. Not always a contiguous verbatim span of `review_text`: `...` marks elided text and `\|\|` joins separate spans, so 46 values will not match exactly |
 | `final_label` | string | Final decided label (combining adjudicated decision and majority vote) |
 | `annotator_count` | int | Number of annotators who labeled this segment |
 | `votes` | list[string] | Array of individual annotator votes cast for this segment |
@@ -73,4 +73,4 @@ Each line is one paper with its language-of-study classification (100 total).
 
 ---
 
-See the [`README.md`](../README.md) for the annotation guideline and full project overview.
+See [`annotation_guideline.md`](../annotation_guideline.md) for the annotation protocol, and [`README.md`](../README.md) for the full project overview.

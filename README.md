@@ -192,7 +192,7 @@ Human-annotated data is in `dataset/annotations/` (after extracting `annotations
 
 ### LLM Evaluation
 
-LLM outputs on the annotation set (used for prompt evaluation and model benchmarking) are in `dataset/llm_evaluation/` (after extracting `llm_evaluation.zip`), organized by task.
+LLM outputs on the annotation set (used for prompt evaluation and model benchmarking) are in `dataset/llm_evaluation/` (after extracting `llm_evaluation.zip`), organized by task. Detected biases are stored under the key `llm_biases` (note: the full-corpus prediction files below use `biases` for the same structure).
 
 ### LLM Predictions
 
@@ -201,7 +201,7 @@ Full-corpus model predictions are in `dataset/llm_predictions/` (after extractin
 - `contrib_results_*.jsonl` — Contribution type predictions
 - `lang_results_*.jsonl` — Language of study predictions
 
-Subcategory predictions for negatively biased reviews are in `llm_predictions/negative_bias_subcategories/`.
+Subcategory predictions for negatively biased reviews are in `llm_predictions/negative_bias_subcategories/<venue>/predictions.json` — one JSON array per venue (not JSONL), covering the 167 reviews predicted as negatively biased. The assigned pattern is in `predicted_pattern` (`A`–`D`, see [`prompts/negative_bias_subcategory.md`](prompts/negative_bias_subcategory.md)).
 
 ## Scripts
 
