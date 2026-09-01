@@ -220,8 +220,9 @@ class GoogleCloudClient(BaseLLMClient):
             "Content-Type": "application/json",
         }
         
-        # Mistral API expects content as a simple string
-        # Note: Mistral requires top_p=1 when temperature=0 (greedy sampling)
+        # Mistral API expects content as a simple string.
+        # At temperature 0 the request pins top_p to 0.95 rather than using the
+        # caller's value; above 0 the caller's top_p is passed through.
         effective_top_p = 0.95 if temperature == 0.0 else top_p
         
         payload = {
