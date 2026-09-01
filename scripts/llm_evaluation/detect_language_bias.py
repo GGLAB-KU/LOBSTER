@@ -148,13 +148,13 @@ def load_processed_ids(output_file: Path) -> set[str]:
 
 
 # ─── DATA LOADERS ────────────────────────
-def load_emnlp2023_index() -> dict[str, dict[str, Any]]:
+def load_emnlp2023_index(jsonl_file: Path = EMNLP2023_JSONL) -> dict[str, dict[str, Any]]:
     """
     Load EMNLP-2023 data indexed by (paper_id, review_rid).
 
     Returns dict keyed by paper_id -> {meta, reviews keyed by rid}.
     """
-    records = load_jsonl(EMNLP2023_JSONL)
+    records = load_jsonl(jsonl_file)
     index: dict[str, dict[str, Any]] = {}
 
     for record in records:
@@ -281,8 +281,8 @@ def get_llm_provider() -> LLMProvider | None:
 
 
 # ─── PROMPT BUILDING ─────────────────────
-def load_prompt_template(prompt_version: str, prompt_file: str = "review_biases_toward_language.md") -> str:
-    """Load the prompt template for a given version."""
+def load_prompt_template(prompt_file: str = "review_biases_toward_language.md") -> str:
+    """Load the prompt template. Prompts are unversioned in this repo; see --prompt-version."""
     prompt_path = PROJECT_ROOT / "prompts" / prompt_file
     return prompt_path.read_text(encoding="utf-8")
 
@@ -618,7 +618,9 @@ def parse_args():
     parser.add_argument(
         "--prompt-version",
         default=DEFAULT_PROMPT_VERSION,
-        help=f"Prompt version to use (default: {DEFAULT_PROMPT_VERSION})",
+        help=f"Version label recorded in output filenames and records. Does not "
+             f"select a prompt file; prompts/ ships the {DEFAULT_PROMPT_VERSION} prompts "
+             f"(default: {DEFAULT_PROMPT_VERSION})",
     )
     parser.add_argument(
         "--prompt-file",
@@ -693,7 +695,7 @@ def main():
         output_file = DEFAULT_OUTPUT_DIR / f"bias_{model_tag}_{prompt_version}_{timestamp}.jsonl"
 
     # Load prompt template
-    prompt_template = load_prompt_template(prompt_version, prompt_file)
+    prompt_template = load_prompt_template(prompt_file)
 
     # Load annotations (JSONL)
     logger.info("Loading annotation file...")
@@ -725,7 +727,7 @@ def main():
         sys.exit(1)
 
     logger.info("Loading EMNLP-2023 index...")
-    emnlp2023_index = load_emnlp2023_index()
+    emnlp2023_index = load_emnlp2023_index(emnlp2023_jsonl)
     logger.info(f"Loaded {len(emnlp2023_index)} EMNLP-2023 papers")
 
     logger.info("Loading EMNLP-ARR-2024 index...")
